@@ -2,8 +2,6 @@
 
 # Casdoor CLI
 
-![build status](https://gitlab.com/sdv9972401/casdoor-cli-go/badges/dev/pipeline.svg)
-![latest release](https://gitlab.com/sdv9972401/casdoor-cli-go/-/badges/release.svg)
 ![licence](https://img.shields.io/badge/licence-GPLv3-lightgray)
 ![go version](https://img.shields.io/badge/go_version-1.22.0-green)
 
