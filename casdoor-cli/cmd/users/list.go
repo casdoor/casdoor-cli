@@ -16,8 +16,6 @@ import (
 	"os"
 )
 
-var accountConfig *cmd.Account
-
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: emoji.Sprintf(":bust_in_silhouette: List all users of your application"),
@@ -33,13 +31,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	var err error
-	userCmd.AddCommand(listCmd)
-	accountConfig, err = cmd.SetupAccount()
-	if err != nil {
-		log.Error().Msgf("Failed to setup account: %v", err)
-	}
-
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -91,15 +82,17 @@ func printUsersInTable(usersResponse GlobalUsersResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	header := []string{
 		"Name",
+		"Organization",
 		"ID",
-		"First Name",
-		"Last Name",
 		"Email",
+		"Verified",
+		"Admin",
 	}
 
 	table.SetHeader(header)
 
 	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold},
 		tablewriter.Colors{tablewriter.Bold},
 		tablewriter.Colors{tablewriter.Bold},
 		tablewriter.Colors{tablewriter.Bold},
@@ -113,6 +106,7 @@ func printUsersInTable(usersResponse GlobalUsersResponse) {
 		tablewriter.Colors{},
 		tablewriter.Colors{},
 		tablewriter.Colors{},
+		tablewriter.Colors{},
 	)
 
 	table.SetAutoMergeCells(false)
@@ -120,7 +114,17 @@ func printUsersInTable(usersResponse GlobalUsersResponse) {
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 
 	for _, user := range usersResponse.Data {
-		data := []string{user.Name, user.ID, user.FirstName, user.LastName, user.Email}
+		emailVerified := emoji.Sprint(":cross_mark:")
+		if user.EmailVerified {
+			emailVerified = emoji.Sprint(":heavy_check_mark:")
+		}
+
+		isAdmin := emoji.Sprint(":cross_mark:")
+		if user.IsAdmin {
+			isAdmin = emoji.Sprint(":heavy_check_mark:")
+		}
+
+		data := []string{user.Name, user.Owner, user.ID, user.Email, emailVerified, isAdmin}
 		table.Append(data)
 	}
 
