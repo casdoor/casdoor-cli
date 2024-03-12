@@ -10,35 +10,35 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
+	"gitlab.com/sdv9972401/casdoor-cli-go/cmd"
 	"io"
 	"net/http"
 	"os"
 )
+
+var accountConfig *cmd.Account
 
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: emoji.Sprintf(":bust_in_silhouette: List all users of your application"),
 	Long:  `Output a list of users formatted in a table.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		account, err := getAccount()
-		if err != nil {
-			log.Error().Msgf("Failed to get account: %v", err)
-			return
-		}
-
-		users, err := fetchUsers(account)
+		users, err := fetchUsers(accountConfig)
 		if err != nil {
 			log.Error().Msgf("Failed to fetch users: %v", err)
 			return
-
 		}
 		printUsersInTable(users)
-
 	},
 }
 
 func init() {
+	var err error
 	userCmd.AddCommand(listCmd)
+	accountConfig, err = cmd.SetupAccount()
+	if err != nil {
+		log.Error().Msgf("Failed to setup account: %v", err)
+	}
 
 	// Here you will define your flags and configuration settings.
 
@@ -51,7 +51,7 @@ func init() {
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func fetchUsers(account *Account) (GlobalUsersResponse, error) {
+func fetchUsers(account *cmd.Account) (GlobalUsersResponse, error) {
 	url := fmt.Sprintf("%s/api/get-global-users", account.CasdoorEndpoint)
 	log.Debug().Msgf("Fetching users using %s path", url)
 	req, err := http.NewRequest("GET", url, nil)
@@ -125,4 +125,5 @@ func printUsersInTable(usersResponse GlobalUsersResponse) {
 	}
 
 	table.Render()
+	emoji.Printf("\n:cloud: Casdoor Enpoint : %s", accountConfig.CasdoorEndpoint)
 }

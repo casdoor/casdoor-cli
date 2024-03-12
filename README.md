@@ -7,7 +7,11 @@
 
 *A clean and straightforward command line interface for Casdoor.*
 
+![](img/t-rec.gif)
+
 > ⚠️ This is a student project, and it is not officially supported nor affiliated with Casdoor. Please use with caution.
+
+
 
 
 

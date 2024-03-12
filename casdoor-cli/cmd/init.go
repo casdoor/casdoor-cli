@@ -18,7 +18,7 @@ import (
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: emoji.Sprintf(":wrench: Initialize Casdoor CLI configuration"),
+	Short: "Initialize Casdoor CLI configuration",
 	Long: emoji.Sprintf(`:wrench: Casdoor CLI initialization
 
 You have to run this command at least once in order to set up your configuration.

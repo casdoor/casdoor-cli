@@ -6,12 +6,6 @@ package users
 
 import "time"
 
-// Account auth variables
-type Account struct {
-	AccessToken     string
-	CasdoorEndpoint string
-}
-
 // GlobalUsersResponse
 // GET /api/get-global-users
 type GlobalUsersResponse struct {
