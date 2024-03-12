@@ -4,6 +4,7 @@ Copyright © 2024 Fabien CHEVALIER
 package cmd
 
 import (
+	"github.com/zalando/go-keyring"
 	"os"
 
 	"github.com/kyokomi/emoji/v2"
@@ -11,6 +12,11 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
+
+type Account struct {
+	AccessToken     string
+	CasdoorEndpoint string
+}
 
 var (
 	flagDebug bool
@@ -73,4 +79,25 @@ func InitLogger() {
 	} else {
 		zerolog.SetGlobalLevel(zerolog.Disabled)
 	}
+}
+
+// SetupAccount factorize token and endpoint retrieval
+func SetupAccount() (*Account, error) {
+	service := "casdoor-cli"
+	accessToken, err := keyring.Get(service, "access_token")
+	if err != nil {
+		log.Error().Msgf("Failed to retrieve access token: %v", err)
+		return nil, err
+	}
+	casdoorEndpoint, err := keyring.Get(service, "endpoint")
+	if err != nil {
+		log.Error().Msgf("Failed to retrieve casdoor endpoint: %v", err)
+		return nil, err
+	}
+
+	accountConfig := &Account{
+		AccessToken:     accessToken,
+		CasdoorEndpoint: casdoorEndpoint,
+	}
+	return accountConfig, nil
 }

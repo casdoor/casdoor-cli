@@ -1,4 +1,4 @@
-APP_NAME := casdoor-cli
+APP_NAME := casdoor
 APP_VERSION ?= 0.0.1
 BUILD_DIR := bin
 SRC_DIR := casdoor-cli
