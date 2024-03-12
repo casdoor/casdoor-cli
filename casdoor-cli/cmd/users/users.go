@@ -43,6 +43,7 @@ func init() {
 
 	cobra.OnInitialize(cmd.InitLogger)
 	cmd.RootCmd.AddCommand(usersCmd)
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -54,7 +55,7 @@ func init() {
 	usersCmd.Flags().BoolP("info", "i", false, "show logged in user information")
 }
 
-func getUserInfo(account *cmd.Account) (GlobalUsersResponse, error) {
+func getUserInfo(account *cmd.Account) (AccountResponse, error) { // TODO: factorise
 	url := fmt.Sprintf("%s/api/get-account", account.CasdoorEndpoint)
 	log.Debug().Msgf("Fetching logged in username using %s path", url)
 	req, err := http.NewRequest("GET", url, nil)
@@ -81,11 +82,15 @@ func getUserInfo(account *cmd.Account) (GlobalUsersResponse, error) {
 	log.Debug().Msgf("Response status code: %d", resp.StatusCode)
 	log.Debug().Msgf("Response headers: %v", resp.Header)
 
-	usersResponse := GlobalUsersResponse{}
+	usersResponse := AccountResponse{}
 	err = json.Unmarshal(body, &usersResponse)
 	if err != nil {
 		log.Error().Msgf("Failed to unmarshal response body: %v", err)
 	}
 
 	return usersResponse, nil
+}
+
+func printUserInfo(accountResponse AccountResponse) {
+	emoji.Printf(":bust_in_silhouette: Logged as %s (id: %s)", accountResponse.Name, accountResponse.ID)
 }

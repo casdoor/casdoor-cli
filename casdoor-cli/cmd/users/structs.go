@@ -18,3 +18,8 @@ type GlobalUsersData struct {
 	EmailVerified bool   `json:"emailVerified"`
 	IsAdmin       bool   `json:"isAdmin"`
 }
+
+type AccountResponse struct {
+	ID   string `json:"sub"`
+	Name string `json:"name"`
+}
