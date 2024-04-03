@@ -128,7 +128,7 @@ func OAuthHandler(casdoorConfig *models.CasdoorConfig) ([]byte, error) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		w.Write(data)
+		w.Write([]byte("✅ You have been successfully authenticated. You may now close this window."))
 
 		dataChan <- data
 	})
