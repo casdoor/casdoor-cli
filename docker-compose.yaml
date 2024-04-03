@@ -2,7 +2,7 @@ version: '3.1'
 services:
   casdoor:
     restart: always
-    image: casbin/casdoor:v1.559.0
+    image: casbin/casdoor:v1.579.0
     entrypoint: /bin/sh -c './server --createDatabase=true'
     ports:
       - "8000:8000"
@@ -11,7 +11,8 @@ services:
     environment:
       RUNNING_IN_DOCKER: "true"
     volumes:
-      - ./conf:/conf/
+      - ./dev:/conf/
+      - ./init_data.json:/init_data.json
   db:
     restart: always
     image: mysql:8.0.25
@@ -21,4 +22,4 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     volumes:
-      - /usr/local/docker/mysql:/var/lib/mysql
+      - ./db/mysql:/var/lib/mysql
