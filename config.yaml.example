@@ -1,4 +1,7 @@
-CASDOOR_ENDPOINT: http://localhost:8000
-CLIENT_ID: 7a7d969f9670d45f3675
-CLIENT_SECRET: a60a49c79d2e844bc1c624c5b17d21ecfb2bb71f
-REDIRECT_URI: http://localhost:3000/callback
+application_name:
+casdoor_endpoint:
+certificate:
+client_id:
+client_secret:
+organization_name:
+redirect_uri:
