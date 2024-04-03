@@ -11,6 +11,22 @@
 
 > ⚠️ This is a student project, and it is not officially supported nor affiliated with Casdoor. Please use with caution.
 
+<!-- TOC -->
+* [Casdoor CLI](#casdoor-cli)
+  * [Description](#description)
+  * [Usage](#usage)
+  * [Features](#features)
+  * [How to install](#how-to-install)
+    * [MacOS](#macos)
+    * [Linux](#linux)
+  * [Configure](#configure)
+    * [Casdoor configuration](#casdoor-configuration)
+    * [Casdoor Cli](#casdoor-cli-1)
+  * [Test and development](#test-and-development)
+    * [Development backend](#development-backend)
+    * [Configuration](#configuration)
+<!-- TOC -->
+
 ## Description
 
 Currently, `casdoor-cli` provides a command line interface able to : 
