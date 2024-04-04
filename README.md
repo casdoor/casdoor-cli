@@ -70,6 +70,10 @@ Flags:
 
 ![keyring.png](img/screenshoot_1.png)
 
+- Fine tuned permissions management :
+
+![permissions.png](img/screenshoot_2.png)
+
 > ⚠️ Currently, `casdoor-cli` only supports MacOS and Linux. Tested versions are Debian 12 and MacOS Sonoma
 
 ## How to install
@@ -100,6 +104,8 @@ A `init_data.json` file is provided in order to bootstrap Casdoor's configuratio
 ### Casdoor Cli
 
 On first launch, `casdoor-cli` will ask you to provide the path to a `config.yaml` file in order to be able to request the Casdoor API. Required field are describe within the `config.yaml.exemple` file : 
+
+![](img/screenshoot_3.png)
 
 ```
 application_name:
