@@ -37,10 +37,9 @@ func (um *UserManager) GetUsers() ([]map[string]interface{}, error) {
 	for _, user := range users {
 		userInfo := map[string]interface{}{
 			"Name":  user.Name,
-			"Owner": user.Owner,
 			"Email": user.Email,
 			"Id":    user.Id,
-			"Roles": strings.TrimPrefix(strings.TrimPrefix(user.Groups[0], "casdoor-cli/"), "casdoor-cli/"),
+			"Group": strings.TrimPrefix(strings.TrimPrefix(user.Groups[0], "casdoor-cli/"), "casdoor-cli/"),
 		}
 
 		userList = append(userList, userInfo)

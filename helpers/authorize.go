@@ -1,8 +1,8 @@
 package helpers
 
-func HasRequiredRole(claimsRoles []string, targetRoles []string) bool {
-	for _, claimsRole := range claimsRoles {
-		for _, targetRole := range targetRoles {
+func HasRequiredGroup(claimsPermission []string, targetPermission []string) bool {
+	for _, claimsRole := range claimsPermission {
+		for _, targetRole := range targetPermission {
 			if claimsRole == targetRole {
 				return true
 			}

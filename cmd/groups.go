@@ -13,7 +13,7 @@ import (
 var groupNameFlag string
 
 var permissionsCmd = &cobra.Command{
-	Use:   "perms",
+	Use:   "groups",
 	Short: "Manage Casdoor permissions",
 	Long:  "Manage Casdoor permissions",
 }

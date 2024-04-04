@@ -74,7 +74,7 @@ func displayLoggedInUserInfo(tokenData *models.TokenData) {
 		"username": tokenData.IDTokenClaims.Name,
 		"id":       tokenData.IDTokenClaims.Sub,
 		"owner":    tokenData.IDTokenClaims.Owner,
-		"roles":    strings.TrimPrefix(strings.Join(tokenData.IDTokenClaims.Groups, ", "), "casdoor-cli/"),
+		"group":    strings.TrimPrefix(strings.Join(tokenData.IDTokenClaims.Groups, ", "), "casdoor-cli/"),
 	}
 	utils.PrintTable(loggedInUserInfo)
 }

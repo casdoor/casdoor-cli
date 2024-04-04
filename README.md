@@ -32,7 +32,7 @@
 Currently, `casdoor-cli` provides a command line interface able to : 
 
 - Manage users in Casdoor (create, edit, delete)
-- Manage users permissions within Casdoor. Built-in roles are the following :
+- Manage users permissions within Casdoor using Casdoor's group feature. Built-in roles are the following :
     - `lector` : read access only
     - `editor` : can create users, but cannot edit users nor delete users
     - `administrator`  : can create, delete, and edit users
@@ -48,15 +48,16 @@ Usage:
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
+  groups      Manage Casdoor permissions
   help        Help about any command
   login       Login to your Casdoor account
   logout      Logout from your Casdoor account
-  perms       Manage Casdoor permissions
   users       Manage Casdoor users
 
 Flags:
   -d, --debug   verbose logging
   -h, --help    help for casdoor
+
 ```
 
 ## Features

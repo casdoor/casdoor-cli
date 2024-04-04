@@ -130,7 +130,7 @@ func checkLoggedInAndGetConfig(requiredRoles []string) (*models.CasdoorConfig, e
 		return nil, err
 	}
 
-	if !helpers.HasRequiredRole(existingTokenData.IDTokenClaims.Groups, requiredRoles) {
+	if !helpers.HasRequiredGroup(existingTokenData.IDTokenClaims.Groups, requiredRoles) {
 		utils.Colorize(color.RedString, "[x] you don't have enough permissions to perform this action (required roles: %v)", requiredRoles)
 		return nil, errors.New("insufficient permissions")
 	}
