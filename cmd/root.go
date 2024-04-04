@@ -13,6 +13,7 @@ import (
 	"gitlab.com/sdv9972401/casdoor-cli/logger"
 	"gitlab.com/sdv9972401/casdoor-cli/models"
 	"gitlab.com/sdv9972401/casdoor-cli/utils"
+	"net/http"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -52,11 +53,19 @@ func rootPreRun(*cobra.Command, []string) {
 
 	if folderExist || fileExists {
 		log.Debug("a config file has been found. Will now attempt to load it")
-		_, err := initCasdoorConfig()
+		config, err := initCasdoorConfig()
 		if err != nil {
 			log.Fatal(err)
 		}
 		log.Debug("config file loaded")
+		// check if endpoint is avaliable
+		resp, err := http.Get(config.Endpoint)
+		if err != nil {
+			utils.Colorize(color.RedString, "[x] endpoint %v is unavailable.", config.Endpoint)
+			return
+		} else {
+			log.Debugf("connection to endpoint successful : %v", resp.StatusCode)
+		}
 	} else {
 		log.Debug("no config file has been found. Will now initialize")
 		utils.Colorize(color.YellowString, "[⚠] no config file detected. Please provide the path to your config.yaml file below :")

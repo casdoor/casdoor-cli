@@ -9,7 +9,7 @@
 
 ![](img/t-rec.gif)
 
-> ⚠️ This is a student project, and it is not officially supported nor affiliated with Casdoor. Please use with caution.
+> ⚠️ This is a student project. I will probably try to release a complete version in the near future as no Casdoor CLI is available yet. For now, this CLI is just a proof of concept.
 
 <!-- TOC -->
 * [Casdoor CLI](#casdoor-cli)
@@ -36,6 +36,9 @@ Currently, `casdoor-cli` provides a command line interface able to :
     - `lector` : read access only
     - `editor` : can create users, but cannot edit users nor delete users
     - `administrator`  : can create, delete, and edit users
+- Manage users groups within Casdoor (create, edit, delete)
+
+Currently, permissions management is handled using Casdoor's Group feature. Current code checks wether a user is in a group or not and adapt the permissions accordingly.
 
 ## Usage
 
@@ -48,13 +51,12 @@ Available Commands:
   help        Help about any command
   login       Login to your Casdoor account
   logout      Logout from your Casdoor account
+  perms       Manage Casdoor permissions
   users       Manage Casdoor users
 
 Flags:
   -d, --debug   verbose logging
   -h, --help    help for casdoor
-
-Use "casdoor [command] --help" for more information about a command.
 ```
 
 ## Features
@@ -124,7 +126,7 @@ Wait a few secondes before trying to log in as Casdoor container will reboot mul
 
 ### Configuration
 
-Create a `config.yaml` at the root of the repo, with the following content :
+Create a `config.yaml` from the `config.yaml.example` at the root of the repo, with the following content :
 
 ```yaml
 application_name: casdoor-cli
@@ -167,7 +169,14 @@ redirect_uri: http://localhost:9000/callback
 
 You can then try to login using with user `casdoor-cli-admin` and password `123456`: 
 
-```
+```bash
 go run main.go login
+```
+
+Or if you wish to use `casdoor` as a command : 
+
+```bash
+make build TARGET_OS=(darwin|linux) && make install TARGET_OS=darwin
+casdoor login
 ```
 
