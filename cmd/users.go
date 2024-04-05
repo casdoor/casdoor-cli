@@ -119,6 +119,10 @@ var userUpdateCmd = &cobra.Command{
 	},
 }
 
+// checkLoggedInAndGetConfig checks if the user is logged in and has the required roles
+// to perform an action by using the access token data. If the user is not logged in or
+// doesn't have the required roles, an error will be returned. Otherwise, the Casdoor
+// configuration is returned.
 func checkLoggedInAndGetConfig(requiredRoles []string) (*models.CasdoorConfig, error) {
 	config, err := initCasdoorConfig()
 	if err != nil {

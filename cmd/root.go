@@ -47,6 +47,9 @@ func init() {
 
 }
 
+// rootPreRun is a pre-run function for the CLI app. It checks if a configuration file exists
+// and tries to load it. If a configuration file is not found, it prompts the user to provide
+// the path to their config.yaml file and creates a new configuration.
 func rootPreRun(*cobra.Command, []string) {
 	logger.ToggleDebug(debug)
 	folderExist, fileExists := checkCasdoorConfig()
@@ -62,7 +65,7 @@ func rootPreRun(*cobra.Command, []string) {
 		resp, err := http.Get(config.Endpoint)
 		if err != nil {
 			utils.Colorize(color.RedString, "[x] endpoint %v is unavailable.", config.Endpoint)
-			return
+			log.Fatal(err)
 		} else {
 			log.Debugf("connection to endpoint successful : %v", resp.StatusCode)
 		}
@@ -114,6 +117,8 @@ func rootPreRun(*cobra.Command, []string) {
 	}
 }
 
+// initCasdoorConfig loads the Casdoor configuration from the config.yaml file.
+// It decodes the base64-encoded values and returns a CasdoorConfig struct.
 func initCasdoorConfig() (*models.CasdoorConfig, error) {
 	_, configFile, err := getCasdoorFolderAndConfig()
 	if err != nil {
@@ -127,7 +132,6 @@ func initCasdoorConfig() (*models.CasdoorConfig, error) {
 		log.Errorf("error reading config file: %s. Please make sure config.yaml exists.", err)
 	}
 
-	// Decoding config values from base64
 	decodedConfig := make(map[string]string)
 	for key, encodedValue := range viper.AllSettings() {
 		decodedBytes, err := base64.StdEncoding.DecodeString(encodedValue.(string))
@@ -166,6 +170,8 @@ func initCasdoorConfig() (*models.CasdoorConfig, error) {
 	return casdoorConfig, err
 }
 
+// checkCasdoorConfig checks if the Casdoor configuration file and folder exist.
+// It returns two boolean values representing the existence of the folder and the file.
 func checkCasdoorConfig() (bool, bool) {
 	casdoorFolder, configFile, err := getCasdoorFolderAndConfig()
 	if err != nil {
@@ -185,6 +191,9 @@ func checkCasdoorConfig() (bool, bool) {
 	return folderExists, fileExists
 }
 
+// getCasdoorFolderAndConfig returns the paths of the Casdoor configuration folder
+// and the config.yaml file. If an error occurs while getting the user's home
+// directory, the error is returned.
 func getCasdoorFolderAndConfig() (string, string, error) {
 	usr, err := user.Current()
 	if err != nil {
@@ -197,17 +206,18 @@ func getCasdoorFolderAndConfig() (string, string, error) {
 	return casdoorFolder, configFile, nil
 }
 
+// createConfigFile creates a new Casdoor configuration file in the specified
+// folder using the values from the user-provided config.yaml file.
+// It base64-encodes the configuration values and writes them to the new file.
 func createConfigFile(casdoorFolder string) error {
 	configFile := filepath.Join(casdoorFolder, "config.yaml")
 
-	// Encoding config values as base64
 	encodedConfig := make(map[string]string)
 	for key, value := range viper.AllSettings() {
 		encodedValue := base64.StdEncoding.EncodeToString([]byte(value.(string)))
 		encodedConfig[key] = encodedValue
 	}
 
-	// Using the encodedConfig map to store the base64 values to the configFile
 	for key, value := range encodedConfig {
 		viper.Set(key, value)
 	}

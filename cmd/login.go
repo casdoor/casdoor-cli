@@ -44,6 +44,11 @@ func init() {
 	RootCmd.AddCommand(logoutCmd)
 }
 
+// runLogin performs the login operation for the Casdoor account.
+//
+// This function initializes Casdoor configuration, reads the saved token data,
+// and logs in if the token is expired or doesn't exist. If the infoFlag is set,
+// it displays the logged-in user's information.
 func runLogin() {
 	config, err := initCasdoorConfig()
 	if err != nil {
@@ -67,6 +72,10 @@ func runLogin() {
 	}
 }
 
+// displayLoggedInUserInfo displays the logged-in user's information.
+//
+// tokenData: the token data related to the logged-in user.
+// This function displays the logged-in user's username, ID, owner, and group.
 func displayLoggedInUserInfo(tokenData *models.TokenData) {
 	utils.Colorize(color.CyanString, "[ℹ] current logged in user: %s", tokenData.IDTokenClaims.Name)
 
@@ -79,6 +88,11 @@ func displayLoggedInUserInfo(tokenData *models.TokenData) {
 	utils.PrintTable(loggedInUserInfo)
 }
 
+// attemptLoginWithErrorHandler attempts Casdoor login with error handling.
+//
+// config: Casdoor configuration to be used during the login attempt.
+// This function attempts to log in with OAuthHandler, parses the OAuth response,
+// and, if successful, saves the token data to the keyring.
 func attemptLoginWithErrorHandler(config *models.CasdoorConfig) {
 	utils.Colorize(color.CyanString, "[ℹ] attempting to log you in...")
 	data, err := OAuthHandler(config)
@@ -99,6 +113,10 @@ func attemptLoginWithErrorHandler(config *models.CasdoorConfig) {
 	}
 }
 
+// runLogout logs out the user from their Casdoor account.
+//
+// The function checks if the user really wants to logout by asking for confirmation.
+// If the confirmation is given, it logs out the user and clears the saved token.
 func runLogout() {
 	config, err := initCasdoorConfig()
 	if err != nil {
@@ -132,6 +150,10 @@ func runLogout() {
 	}
 }
 
+// userWantsToLogout checks if the user really wants to logout.
+//
+// bool: true if the user gives a confirmation in the form of "y" or "yes", false otherwise.
+// This function prompts the user for confirmation to logout and returns the answer.
 func userWantsToLogout() bool {
 	fmt.Print(color.YellowString("[⚠] this will delete all saved token. You will need to log in again in order to use Casdoor CLI. Are you sure about that ? [y/N]: "))
 
