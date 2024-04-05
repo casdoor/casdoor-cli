@@ -101,6 +101,8 @@ You then need to add `casdoor-cli` to your `PATH`. Depending on your shell, you 
 
 A `init_data.json` file is provided in order to bootstrap Casdoor's configuration so it can be used by `casdoor-cli`. Please refer to the [official documentation](https://casdoor.org/docs/deployment/data-initialization/) to learn how to use it.
 
+You may also create an application yourself inside Casdoor and fill up the configuration according to your needs.
+
 ### Casdoor Cli
 
 On first launch, `casdoor-cli` will ask you to provide the path to a `config.yaml` file in order to be able to request the Casdoor API. Required field are describe within the `config.yaml.exemple` file : 
