@@ -38,7 +38,7 @@ Currently, `casdoor-cli` provides a command line interface able to :
     - `administrator`  : can create, delete, and edit users
 - Manage users groups within Casdoor (create, edit, delete)
 
-Currently, permissions management is handled using Casdoor's Group feature. Current code checks wether a user is in a group or not and adapt the permissions accordingly.
+Currently, permissions management is handled using Casdoor's Group feature. Current code checks wether a user is in a group or not and adapt the permissions accordingly. This is due to how Casdoor works, as the `api/add-user` only allows attaching group to a user upon creation. 
 
 ## Usage
 
