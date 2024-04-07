@@ -74,7 +74,7 @@ Flags:
 
 ![permissions.png](img/screenshoot_2.png)
 
-> ⚠️ Currently, `casdoor-cli` only supports MacOS and Linux. Tested versions are Debian 12 and MacOS Sonoma
+> ⚠️ Currently, `casdoor-cli` only supports MacOS and Linux. Tested versions are Debian 12 and MacOS Sonoma. Using WSL on Windows may work, but it is not tested as I don't own a Windows machine.
 
 ## How to install
 
