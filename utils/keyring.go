@@ -149,6 +149,8 @@ func ClearSavedToken() error {
 }
 
 // Helper functions
+// Token is often too big to be stored in the keyring. Functions below split it in chunks of 1024 characters.
+// Joining them is also handled.
 func splitInChunks(token string, chunkSize int) []string {
 	parts := make([]string, (len(token)+chunkSize-1)/chunkSize)
 	for i := 0; i < len(parts); i++ {
@@ -188,6 +190,6 @@ func loadChunkedData(serviceName, key string, numParts int) (string, error) {
 		}
 		parts[i] = part
 	}
-	log.Debugf("Loaded %d chunks for key %s\n", numParts, key) // Add this line for debugging
+	log.Debugf("Loaded %d chunks for key %s\n", numParts, key)
 	return joinChunks(parts), nil
 }
