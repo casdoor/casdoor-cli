@@ -42,6 +42,8 @@ Currently, permissions management is handled using Casdoor's Group feature. Curr
 
 ## Usage
 
+> ⚠️ Currently, `casdoor-cli` only supports MacOS and Linux. Tested versions are Debian 12 and MacOS Sonoma. Using WSL on Windows won't work as the CLI relies on GNOME's implementation of Secret Service dbus interface (GNOME Keyring) to store secrets.
+
 ```
 Usage:
   casdoor [command]
@@ -73,8 +75,6 @@ Flags:
 - Fine tuned permissions management :
 
 ![permissions.png](img/screenshoot_2.png)
-
-> ⚠️ Currently, `casdoor-cli` only supports MacOS and Linux. Tested versions are Debian 12 and MacOS Sonoma. Using WSL on Windows may work, but it is not tested as I don't own a Windows machine.
 
 ## How to install
 
