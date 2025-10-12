@@ -108,3 +108,30 @@ type CasdoorConfig struct {
 	ApplicationName  string
 	RedirectURI      string
 }
+
+type Application struct {
+	Owner                string   `json:"owner"`
+	Name                 string   `json:"name"`
+	CreatedTime          string   `json:"createdTime"`
+	DisplayName          string   `json:"displayName"`
+	Logo                 string   `json:"logo"`
+	HomepageUrl          string   `json:"homepageUrl"`
+	Description          string   `json:"description"`
+	Organization         string   `json:"organization"`
+	Cert                 string   `json:"cert"`
+	EnablePassword       bool     `json:"enablePassword"`
+	EnableSignUp         bool     `json:"enableSignUp"`
+	EnableSigninSession  bool     `json:"enableSigninSession"`
+	EnableAutoSignin     bool     `json:"enableAutoSignin"`
+	EnableCodeSignin     bool     `json:"enableCodeSignin"`
+	EnableSamlCompress   bool     `json:"enableSamlCompress"`
+	ClientId             string   `json:"clientId"`
+	ClientSecret         string   `json:"clientSecret"`
+	RedirectUris         []string `json:"redirectUris"`
+	TokenFormat          string   `json:"tokenFormat"`
+	ExpireInHours        int      `json:"expireInHours"`
+	RefreshExpireInHours int      `json:"refreshExpireInHours"`
+	GrantTypes           []string `json:"grantTypes"`
+	ResponseTypes        []string `json:"responseTypes"`
+	Scopes               []string `json:"scopes"`
+}
