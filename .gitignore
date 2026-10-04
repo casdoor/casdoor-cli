@@ -1,0 +1,8 @@
+# Binaries
+/casdoor
+/casdoor.exe
+dist/
+
+# IDE
+.idea/
+.vscode/

@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: casdoor
+
+builds:
+  - main: ./cmd/casdoor
+    binary: casdoor
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/casdoor/casdoor-cli/internal/cli.Version={{ .Version }}
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+# semantic-release creates the release with its notes, GoReleaser only adds the binaries.
+changelog:
+  disable: true
+
+release:
+  mode: keep-existing
