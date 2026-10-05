@@ -3,6 +3,12 @@ version: 2
 
 project_name: casdoor
 
+before:
+  hooks:
+    # The version info and icon of casdoor.exe, without them antivirus software tends to
+    # report the binary as malware.
+    - go run github.com/tc-hib/go-winres@v0.3.3 make --in cmd/casdoor/winres/winres.json --out cmd/casdoor/rsrc --arch amd64,arm64 --product-version {{ .Version }} --file-version {{ .Version }}
+
 builds:
   - main: ./cmd/casdoor
     binary: casdoor
@@ -15,8 +21,11 @@ builds:
     goarch:
       - amd64
       - arm64
+    flags:
+      - -trimpath
+    # The symbols are kept, stripped Go binaries are reported as malware more often.
     ldflags:
-      - -s -w -X github.com/casdoor/casdoor-cli/internal/cli.Version={{ .Version }}
+      - -X github.com/casdoor/casdoor-cli/internal/cli.Version={{ .Version }}
 
 archives:
   - formats: [tar.gz]

@@ -19,8 +19,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
-	"runtime"
 	"strings"
 	"time"
 
@@ -168,17 +166,6 @@ func (a *app) readPassword(fromStdin bool) (string, error) {
 	password, err := term.ReadPassword(int(f.Fd()))
 	fmt.Fprintln(a.stderr)
 	return string(password), err
-}
-
-func openBrowser(url string) error {
-	switch runtime.GOOS {
-	case "windows":
-		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
-	case "darwin":
-		return exec.Command("open", url).Start()
-	default:
-		return exec.Command("xdg-open", url).Start()
-	}
 }
 
 func newLogoutCommand(a *app) *cobra.Command {
