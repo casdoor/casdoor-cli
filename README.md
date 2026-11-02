@@ -72,7 +72,7 @@ casdoor profile use prod
 casdoor --profile staging users list
 ```
 
-The profiles are in `casdoor/config.json` of the user's config directory (`~/.config` on Linux, `~/Library/Application Support` on macOS, `%AppData%` on Windows), readable only by the user; `casdoor profile path` prints it. `$CASDOOR_CONFIG` uses another file.
+The profiles are in `casdoor/config.json` of the user's config directory (`~/.config` on Linux, `~/Library/Application Support` on macOS, `%AppData%` on Windows), readable only by the user; `casdoor profile path` prints it. `$CASDOOR_CONFIG` uses another file. On Linux and macOS the file is created with mode `0600`; on Windows the client secret, access token and refresh token are encrypted with DPAPI, so another user or another computer cannot read them. A config encrypted on Windows cannot be used on another OS, log in again. In WSL keep the file in the Linux home: a file under `/mnt/c` does not get the `0600` mode.
 
 ### Environment variables
 

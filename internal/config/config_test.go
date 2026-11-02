@@ -18,6 +18,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 	"time"
 )
@@ -55,6 +56,14 @@ func TestSaveAndLoad(t *testing.T) {
 		if info.Mode().Perm() != 0o600 {
 			t.Errorf("the config holds tokens, its mode is %v", info.Mode().Perm())
 		}
+	} else {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if strings.Contains(string(data), `"token"`) {
+			t.Error("the access token is written in plaintext on Windows")
+		}
 	}
 
 	loaded, err := LoadFile(path)
@@ -67,6 +76,28 @@ func TestSaveAndLoad(t *testing.T) {
 	}
 	if err = p.Validate(); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSecretProtection(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("DPAPI is Windows-only")
+	}
+
+	protected, err := protectSecret("s3cret")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if protected == "s3cret" || !IsEncrypted(protected) {
+		t.Fatalf("the secret was not encrypted: %q", protected)
+	}
+
+	secret, err := unprotectSecret(protected)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if secret != "s3cret" {
+		t.Fatalf("got %q", secret)
 	}
 }
 

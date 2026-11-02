@@ -87,15 +87,23 @@ func LoadFile(path string) (*Config, error) {
 	if c.Profiles == nil {
 		c.Profiles = map[string]*Profile{}
 	}
+	for _, p := range c.Profiles {
+		p.decrypt()
+	}
 	return c, nil
 }
 
-// Save writes the config, only the user can read it since it holds secrets and tokens.
+// Save writes the config, only the user can read it since it holds secrets and tokens. On
+// Windows the secrets are encrypted with DPAPI before they are written.
 func (c *Config) Save() error {
 	if err := os.MkdirAll(filepath.Dir(c.path), 0o700); err != nil {
 		return err
 	}
-	data, err := json.MarshalIndent(c, "", "  ")
+	encrypted, err := c.encrypted()
+	if err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(encrypted, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -104,6 +112,46 @@ func (c *Config) Save() error {
 		return err
 	}
 	return os.Rename(tmp, c.path)
+}
+
+func (c *Config) clone() *Config {
+	out := &Config{Current: c.Current, Profiles: make(map[string]*Profile, len(c.Profiles)), path: c.path}
+	for name, p := range c.Profiles {
+		profile := *p
+		out.Profiles[name] = &profile
+	}
+	return out
+}
+
+func (c *Config) encrypted() (*Config, error) {
+	out := c.clone()
+	for name, p := range out.Profiles {
+		var err error
+		if p.ClientSecret, err = protectSecret(p.ClientSecret); err != nil {
+			return nil, fmt.Errorf("failed to encrypt the client secret of profile %q: %w", name, err)
+		}
+		if p.AccessToken, err = protectSecret(p.AccessToken); err != nil {
+			return nil, fmt.Errorf("failed to encrypt the access token of profile %q: %w", name, err)
+		}
+		if p.RefreshToken, err = protectSecret(p.RefreshToken); err != nil {
+			return nil, fmt.Errorf("failed to encrypt the refresh token of profile %q: %w", name, err)
+		}
+	}
+	return out, nil
+}
+
+// decrypt leaves a secret that cannot be decrypted as it is, Validate reports it when the
+// profile is used, so profile list and profile path still work.
+func (p *Profile) decrypt() {
+	if value, err := unprotectSecret(p.ClientSecret); err == nil {
+		p.ClientSecret = value
+	}
+	if value, err := unprotectSecret(p.AccessToken); err == nil {
+		p.AccessToken = value
+	}
+	if value, err := unprotectSecret(p.RefreshToken); err == nil {
+		p.RefreshToken = value
+	}
 }
 
 func (c *Config) File() string {
@@ -162,6 +210,10 @@ func (c *Config) Resolve(name string) *Profile {
 }
 
 func (p *Profile) Validate() error {
+	if IsEncrypted(p.ClientSecret) || IsEncrypted(p.AccessToken) || IsEncrypted(p.RefreshToken) {
+		return errors.New("the saved login cannot be decrypted on this computer, run: casdoor login")
+	}
+
 	var missing []string
 	if p.Endpoint == "" {
 		missing = append(missing, "endpoint (CASDOOR_ENDPOINT)")
